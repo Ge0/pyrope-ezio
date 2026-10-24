@@ -115,7 +115,7 @@ export class FarinLocator {
 
     return (
       WALKABLE_POSITIONS.has(key) &&
-      INVALID_POSITIONS.has(key)
+      !INVALID_POSITIONS.has(key)
     );
   }
 

@@ -28,6 +28,19 @@ declare global {
 }
 
 class LocationLocator {
+
+  public isImperialSector() {
+    const element = document.querySelector<HTMLElement>("#carte_fond");
+
+    const background = element
+      ? getComputedStyle(element).backgroundImage
+      : "";
+
+    const filename = background.match(/\/([^/"')]+\.png)(?:\?[^"')]*)?["']?\)/)?.[1];
+
+    return filename === "carte_rues_s1.png";
+  }
+
   public locateLocally(): Position {
     const name = document
       .querySelector("#lieu_actuel .titre1")
@@ -163,13 +176,17 @@ class EzioPlugin implements PyropePlugin {
           return;
         }
 
+        const isImperialSector = this.locationLocator.isImperialSector();
+
         const zone =
           position.y < 28
             ? "haute ville"
             : position.y < 74
               ? "centre ville"
               : "basse ville";
-
+        if (isImperialSector) {
+          pyrope.print("Vous êtes en secteur impéral.");
+        }
         pyrope.print(`Vous êtes en ${zone}.`);
       },
     });
